@@ -1,43 +1,75 @@
 import React from 'react';
-import { Todo } from '../model';
+import { Todo } from '../models/models';
 import { SingleTodo } from './SingleTodo';
-import './styles.css';
+import { Droppable } from 'react-beautiful-dnd';
 
 interface Props {
-  todos: Todo[]; //to tablica todo
-  setTodos: React.Dispatch<React.SetStateAction<Todo[]>>;
+  todos: Array<Todo>; //to tablica todo
+  setTodos: React.Dispatch<React.SetStateAction<Array<Todo>>>;
+  setCompletedTodos: React.Dispatch<React.SetStateAction<Array<Todo>>>;
+  CompletedTodos: Array<Todo>;
 }
-/* export const TodoList: React.FC = ({ todos, setTodos }: Props) => { 
+
+/* export const TodoList: React.FC = ({ todos, setTodos }: Props) => {
     ===  blad Type '({ todos, setTodos }: Props) => JSX.Element' is not assignable to type 'FC<{}>'.
-  Types of parameters '__0' and 'props' are incompatible.
+ Types of parameters '__0' and 'props' are incompatible.
   Type '{}' is missing the following properties from type 'Props': todos, setTodos*/
 
-export const TodoList: React.FC<Props> = ({ todos, setTodos }: Props) => {
+export const TodoList = ({
+  todos,
+  setTodos,
+  CompletedTodos,
+  setCompletedTodos,
+}: Props) => {
   return (
     <div className="container">
-      <div className="todos">
-        <span className="todos_heading">Active Tasks</span>
-        {todos.map((todo) => (
-          <SingleTodo
-            todo={todo}
-            key={todo.id}
-            todos={todos}
-            setTodos={setTodos}
-          />
-        ))}
-      </div>
-      <div className="todos remove">
-        <span className="todos_heading">Completed Tasks</span>
-        {todos.map((todo) => (
-          <SingleTodo
-            todo={todo}
-            key={todo.id}
-            todos={todos}
-            setTodos={setTodos}
-          />
-        ))}
-      </div>
+      <Droppable droppableId="TodosList">
+        {(provided, snapshot) => (
+          <div
+            className={`todos ${snapshot.isDraggingOver ? 'dragactive' : ''}`}
+            ref={provided.innerRef}
+            {...provided.droppableProps}
+          >
+            <span className="todos__heading">Active Tasks</span>
+            {todos?.map((todo, index) => (
+              <SingleTodo
+                index={index}
+                todos={todos}
+                todo={todo}
+                key={todo.id}
+                setTodos={setTodos}
+              />
+            ))}
+            {provided.placeholder}
+          </div>
+        )}
+      </Droppable>
+      {/* div z active task ktorego bedziemy przenosic */}
+      <Droppable droppableId="TodosRemove">
+        {(provided, snapshot) => (
+          <div
+            ref={provided.innerRef}
+            {...provided.droppableProps}
+            className={`todos  ${
+              snapshot.isDraggingOver ? 'dragcomplete' : 'remove'
+            }`}
+          >
+            <span className="todos__heading">Completed Tasks</span>
+            {CompletedTodos?.map((todo, index) => (
+              <SingleTodo
+                index={index}
+                todos={CompletedTodos}
+                todo={todo}
+                key={todo.id}
+                setTodos={setCompletedTodos}
+              />
+            ))}
+            {provided.placeholder}
+          </div>
+        )}
+      </Droppable>
     </div>
   );
 };
-// 1.09***********************************************************************
+// /* Dropable to element ktory jest przenoszony
+// droppableId to po to zeby zidentyfikowac przenoszony element*/

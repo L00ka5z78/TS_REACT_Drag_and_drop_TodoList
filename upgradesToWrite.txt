@@ -1,0 +1,9 @@
+02.02.23
+
+split the app components content into separate files
+add validation = throw error if task has the same name
+
+add backend
+write tasks in db
+add routing and task record
+add login page

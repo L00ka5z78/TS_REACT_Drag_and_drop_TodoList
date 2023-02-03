@@ -80,7 +80,7 @@
   color: white;
 }
 
-.todo__single {
+.todos__single {
   display: flex;
   border-radius: 5px;
   padding: 20px;
