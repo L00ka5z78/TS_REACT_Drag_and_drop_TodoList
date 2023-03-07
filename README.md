@@ -1,5 +1,5 @@
 
-#This is a project which i built during typescript course I took. 
+## This is a project which i built during typescript course I took. 
 This is NOT my work, however I was able to write some pieces of code on my own,
 before I moved to follow and see how the teacher solved functionalities
 
